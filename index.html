@@ -1,0 +1,221 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Warna Emosi</title>
+
+<style>
+:root{
+    --primary:#6C63FF;
+    --card:#FFFFFF;
+    --text:#2C2C2C;
+    --muted:#777;
+}
+
+*{box-sizing:border-box}
+
+body{
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:linear-gradient(135deg,#6C63FF,#8E88FF);
+    min-height:100vh;
+    margin:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    width:100%;
+    max-width:420px;
+    padding:20px;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.card{
+    background:var(--card);
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+h1,h2{color:var(--text);margin-bottom:10px}
+p{color:var(--muted)}
+
+.options{margin-top:20px}
+.options label{
+    display:flex;
+    gap:10px;
+    padding:14px;
+    margin-bottom:12px;
+    border-radius:12px;
+    border:2px solid #eee;
+    cursor:pointer;
+}
+.options input{display:none}
+.options label:has(input:checked){
+    border-color:#6C63FF;
+    background:#EEF0FF;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:600;
+    background:#6C63FF;
+    color:white;
+}
+
+button.secondary{
+    background:#E5E7FF;
+    color:#6C63FF;
+}
+
+.color-bar{
+    height:14px;
+    border-radius:8px;
+    margin-bottom:14px;
+}
+.yellow{background:#FFD93D}
+.blue{background:#4D96FF}
+.red{background:#FF4D4D}
+.gray{background:#B0B0B0}
+
+.small{font-size:14px;margin-bottom:6px}
+.center{text-align:center}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<!-- INTRO -->
+<div id="page1" class="page active">
+<div class="card center">
+<h1>Kuis Warna Emosi</h1>
+<p>Kenali kondisi emosionalmu melalui 10 pertanyaan reflektif</p>
+<div id="qrcode" style="margin:20px auto;"></div>
+<button onclick="nextPage()">Mulai Kuis</button>
+</div>
+</div>
+
+<!-- TEMPLATE PERTANYAAN -->
+<script>
+const questions = [
+" Saat menghadapi masalah, reaksi emosional pertama Anda adalah…",
+" Ketika keinginan Anda tidak terpenuhi, Anda cenderung…",
+" Bagaimana perasaan Anda menjalani hari-hari akhir-akhir ini?",
+" Saat berada di lingkungan ramai, Anda biasanya merasa…",
+" Ketika emosi memuncak, apa yang paling sering Anda lakukan?",
+" Bagaimana cara Anda mengekspresikan emosi kepada orang terdekat?",
+" Emosi apa yang paling sering Anda rasakan dalam seminggu terakhir?",
+" Saat mengingat pengalaman yang berkesan, perasaan yang muncul adalah…",
+" Jika perasaan Anda digambarkan sebagai warna, maka warnanya adalah…",
+" Bagaimana kondisi emosional Anda saat ini?"
+];
+
+const options = [
+["Tetap optimis dan mencari solusi","Merasa sedih dan kehilangan semangat","Marah dan mudah tersulut","Tidak yakin apa yang saya rasakan"],
+["Menerimanya dengan lapang","Merasa kecewa dan murung","Kesal dan ingin meluapkan emosi","Bingung dan tidak tahu harus bereaksi bagaimana"],
+["Bahagia dan berenergi","Sedih dan lelah secara emosional","Mudah tersinggung","Biasa saja namun tidak jelas"],
+["Senang dan bersemangat","Tidak nyaman dan ingin menyendiri","Cepat kesal","Netral tapi tidak tenang"],
+["Menenangkan diri dengan hal positif","Menarik diri dan diam","Meluapkan emosi secara langsung","Terdiam karena tidak tahu harus berbuat apa"],
+["Terbuka dan hangat","Tertutup dan pendiam","Tegas dan meledak-ledak","Tidak konsisten"],
+["Senang dan puas","Sedih dan kosong","Kesal dan marah","Campur aduk"],
+["Syukur dan bahagia","Haru dan sedih","Kesal atau kecewa","Sulit menjelaskannya"],
+["Cerah dan hangat","Gelap dan dingin","Menyala dan kuat","Pucat atau samar"],
+["Stabil dan positif","Rentan dan murung","Tegang dan mudah tersulut","Tidak menentu"]
+];
+</script>
+
+<!-- HALAMAN PERTANYAAN -->
+<script>
+for(let i=0;i<10;i++){
+document.write(`
+<div id="page${i+2}" class="page">
+<div class="card">
+<h2>Pertanyaan ${i+1}</h2>
+<p>${questions[i]}</p>
+<div class="options">
+<label><input type="radio" name="q${i+1}" value="yellow"><span>${options[i][0]}</span></label>
+<label><input type="radio" name="q${i+1}" value="blue"><span>${options[i][1]}</span></label>
+<label><input type="radio" name="q${i+1}" value="red"><span>${options[i][2]}</span></label>
+<label><input type="radio" name="q${i+1}" value="gray"><span>${options[i][3]}</span></label>
+</div>
+<button class="secondary" onclick="prevPage()">Sebelumnya</button>
+<button onclick="${i===9?'calculateResult()':'nextPage()'}">${i===9?'Lihat Hasil':'Selanjutnya'}</button>
+</div>
+</div>
+`);
+}
+</script>
+
+<!-- HASIL -->
+<div id="page12" class="page">
+<div class="card">
+<h2>Hasil Emosi Anda</h2>
+<p class="small">Kuning</p><div class="color-bar yellow" id="yellowBar"></div>
+<p class="small">Biru</p><div class="color-bar blue" id="blueBar"></div>
+<p class="small">Merah</p><div class="color-bar red" id="redBar"></div>
+<p class="small">Abu-abu</p><div class="color-bar gray" id="grayBar"></div>
+<button onclick="resetQuiz()">Ulangi Kuis</button>
+</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+let currentPage=1;
+const totalQuestions=10;
+
+function showPage(n){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById('page'+n).classList.add('active');
+currentPage=n;
+}
+
+function nextPage(){
+if(currentPage>=2 && currentPage<=11){
+if(!document.querySelector(`input[name="q${currentPage-1}"]:checked`)){
+alert("Silakan pilih jawaban terlebih dahulu");
+return;
+}}
+showPage(currentPage+1);
+}
+
+function prevPage(){showPage(currentPage-1)}
+
+function calculateResult(){
+let scores={yellow:0,blue:0,red:0,gray:0};
+for(let i=1;i<=totalQuestions;i++){
+scores[document.querySelector(`input[name="q${i}"]:checked`).value]++;
+}
+for(let c in scores){
+document.getElementById(c+"Bar").style.width=
+Math.round((scores[c]/totalQuestions)*100)+"%";
+}
+showPage(12);
+}
+
+function resetQuiz(){
+document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+showPage(1);
+}
+
+new QRCode(document.getElementById("qrcode"),{
+text:window.location.href,
+width:160,
+height:160
+});
+</script>
+
+</body>
+</html>
